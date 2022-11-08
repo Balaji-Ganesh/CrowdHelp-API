@@ -1,0 +1,28 @@
+{
+  "name": "crowdhelp-api",
+  "version": "1.0.0",
+  "description": "A backend service for the UI-platform",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Balaji-Ganesh/CrowdHelp-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Balaji-Ganesh/CrowdHelp-API/issues"
+  },
+  "homepage": "https://github.com/Balaji-Ganesh/CrowdHelp-API#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
