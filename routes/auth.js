@@ -1,48 +1,38 @@
-const firebaseAdmin = require("../config/firebase/firebase");
+// --- NOTE: this way of authentication is not considering. using firebase-admin way,
+
+
+
+
+
+
+
+
+
+
+
+// const firebaseAuth = require("../config/firebase/firebase");
 const express = require("express");
 const router = express.Router();
+
 // Sign-up route..
 router.post("/sign-up", async (request, response) => {
-  // console.log(request.body);
-  try {
-    await firebaseAdmin.auth().createUser({
-      email: request.body.email,
-      password: request.body.password,
-      displayName: request.body.firstName + " " + request.body.lastName,
-      emailVerified: false, // as a new user, ..
-      disabled: false, // acount disabled
-    });
-    response.status(200).json({ msg: "Sign-up success." });
-  } catch (error) {
-    // console.log("[INFO] Error in creation of new user.");
-    response.status(500).json({
-      msg: error.message,
+  console.log(request.body);
+  // if received no email and password..
+  if (!request.body.email || !request.body.password) {
+    return response.status(422).json({
+      email: "email is required",
+      pwd: "password is required",
     });
   }
-});
-
-// Sign-in route..
-router.post("/sign-in", async (request, response) => {
-  // console.log(request.body);
-  try {
-    await firebaseAdmin
-      .auth()
-      .getUserByEmail(request.body.email)
-      .then((userRecord) => {
-        console.log(userRecord.toJSON());
-        // need to verify password -- how to do???
-      });
-    response.status(200).json({ msg: "Sign-in success." });
-  } catch (error) {
-    // console.log("[INFO] Error in creation of new user.");
-    response.status(500).json({
-      msg: error.message,
+  // when received..
+  await firebaseAuth
+    .createUserWithEmailAndPassword(request.body.email, request.body.password)
+    .then((data) => res.status(201).json(data))
+    .catch((error) => {
+      if (error.code == "auth/weak-password") {
+        return response.status(500).json({ error: error.message });
+      } else return response.status(500).json({ error: error.message });
     });
-  }
 });
 
-// test route..
-router.get("/", (request, response) => {
-  response.json("auth routes in working state.");
-});
 module.exports = router;
