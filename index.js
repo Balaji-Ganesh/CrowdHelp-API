@@ -17,7 +17,7 @@ app.use(cors());
 app.use(middleware.decodeToken); // used for validating the token received from client.
 
 // Routes..
-app.use("/auth", authRoutes);
+// app.use("/auth", authRoutes);
 app.use("/api", apiRoutes);
 
 app.use("/", (req, res) => {

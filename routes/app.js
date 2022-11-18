@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
+router.get("/", (request, response) => {
+  // Extract the user token and perform validation..
+  console.log(request.user); // get the user details from here..
+  response.json({ msg: "hii" });
+});
+
+// testing route..
 router.get("/data", (request, response) => {
   // Extract the user token and perform validation..
-  console.log(request.user);    // get the user details from here..
+  console.log(request.user); // get the user details from here..
   response.json({
     todo: [
       {
