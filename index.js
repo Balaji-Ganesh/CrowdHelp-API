@@ -24,16 +24,18 @@ require("./routes/campaigns.routes")(app); // HigherOrderFunction, app object ob
 app.use("/", (req, res) => {
   // ONLY for testing..
   // console.log(");
-  res.send(
-    "You queried for '" +
-      req.path +
-      "' with '" +
-      req.method +
-      "' method. \n\
+  res
+    .status(404)
+    .send(
+      "You queried for '" +
+        req.path +
+        "' with '" +
+        req.method +
+        "' method. \n\
       I'm 404-Not_Found. \n\
     You've reached me as used incorrect or undefined route-name or method. \n\
     Don't panic, just cross-check."
-  );
+    );
 });
 
 // listen

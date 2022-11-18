@@ -13,7 +13,7 @@ module.exports = (app) => {
   // when done successfully, can access `request.user` which contain user-credentials extracted from JWT token.
   router.post("/create-campaign", campaigns.createCampaign);
   router.post("/fund-campaign/:address", campaigns.fundCampaign);
-  router.post("/end-campaign/:address", campaigns.endCampaign);
+  router.delete("/abort-campaign/:address", campaigns.abortCampaign);
 
   // testing purpose..
   router.get("/", (request, response) => {

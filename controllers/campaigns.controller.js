@@ -78,6 +78,7 @@ exports.createCampaign = async (req, res) => {
       category,
       deadline,
       walletAddress,
+      minContribAmount,
     } = req.body;
 
     // STEP-1: ..
@@ -93,11 +94,13 @@ exports.createCampaign = async (req, res) => {
         bannerUrl: bannerUrl,
         campaignStatus: "ACTIVE",
         ethRaised: ethRaised,
-        category: category,
+        minContribAmount: minContribAmount,
         ethFunded: 0,
         deadline: deadline,
         createdAt: uniqueId,
+        id: uniqueId,
         raisedBy: UID, // should be req.user.UID
+        backersCount: 3, // actually, this field will be obtained from blockchain. here for testing
         walletAddress: walletAddress,
       });
 
@@ -155,7 +158,7 @@ exports.fundCampaign = async (req, res) => {
   const uniqueId = req.params.address;
   try {
     // STEP-0: Extract the body
-    const { amount } = req.body;
+    const { contributionAmount } = req.body;
     // STEP-1:
 
     // STEP-2:
@@ -171,7 +174,7 @@ exports.fundCampaign = async (req, res) => {
         await user.update({
           campaignsBacked: firebaseAdmin.firestore.FieldValue.arrayUnion({
             campaignId: uniqueId,
-            amount: amount,
+            amount: contributionAmount,
           }),
         });
       }
@@ -186,7 +189,9 @@ exports.fundCampaign = async (req, res) => {
         msg: "No such campaign exists. Please check the URL entered.",
       });
     // STEP-4:
-    return res.status(200).json("fund campaign route");
+    return res
+      .status(200)
+      .json({ msg: "Funded successfully. Thanks for your contribution." });
   } catch (err) {
     // NOTE: decide status code based on the error..
     console.log(err);
@@ -194,7 +199,7 @@ exports.fundCampaign = async (req, res) => {
   }
 };
 
-exports.endCampaign = async (req, res) => {
+exports.abortCampaign = async (req, res) => {
   /* What to do here??.. (task-division of this, lacking some clarity)
     NOTE: For normal end (i.e., after time-block expiry) smart contract will handle the transaction of transfer.
     here only handling the abrupt-ending case.
@@ -208,6 +213,8 @@ exports.endCampaign = async (req, res) => {
   try {
     // STEP-0:Extract the body {contains `reason`}
     const { reason } = req.body; // reason for aborting.
+    console.log("reason: ");
+    console.log(reason);
     const uniqueId = req.params.address; // address of the campaign
 
     // STEP-1:
@@ -221,7 +228,7 @@ exports.endCampaign = async (req, res) => {
       campaign.set(
         {
           campaignStatus: "ABORTED",
-          abortReason: reason, // NOTE that..! This field will contain only when ABORTED.
+          abortReason: "" + reason, // NOTE that..! This field will contain only when ABORTED.
         },
         { merge: true }
       );
