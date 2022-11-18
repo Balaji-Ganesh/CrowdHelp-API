@@ -174,28 +174,47 @@ exports.fundCampaign = async (req, res) => {
   }
 };
 
-exports.endCampaign = (req, res) => {
+exports.endCampaign = async (req, res) => {
   /* What to do here??.. (task-division of this, lacking some clarity)
     NOTE: For normal end (i.e., after time-block expiry) smart contract will handle the transaction of transfer.
     here only handling the abrupt-ending case.
 
       0. Extract the body {contains `reason`}
-      1. Terminate/invalidate the smart-contract.
+      1. Terminate/invalidate the smart-contract -- + refund the money back to the backers
       2. Update the status in firestore respective document.
       ..
       4. based on the result, send appropriate message back as acknowledgement.
     */
   try {
+    // STEP-0:Extract the body {contains `reason`}
+    const { reason } = req.body; // reason for aborting.
+    const uniqueId = req.params.address; // address of the campaign
+
     // STEP-1:
+    // How to invalidate -- currently unknown -- guess - use a state variable of type enum.
+    /////////////////// -- here call the refund function of smart contract.
 
-    // STEP-2:
+    // STEP-2:Update the status in firestore respective document.
+    console.log(uniqueId);
+    const campaign = campaigns.doc("" + uniqueId);
+    if ((await campaign.get()).exists) {
+      campaign.set(
+        {
+          campaignStatus: "ABORTED",
+          abortReason: reason, // NOTE that..! This field will contain only when ABORTED.
+        },
+        { merge: true }
+      );
+    } else
+      return res.status(404).json({
+        msg: "No such campaign exists. Please check the URL entered.",
+      });
 
-    // STEP-3:
-
-    // STEP-4
-    return res.status(200).json("end campaign route");
+    // STEP-4: Sending acknowledgement
+    return res.status(200).json({ msg: "Aborted successfully." });
   } catch (err) {
     // NOTE: decide status code based on the error..
+    console.log(err);
     return res.status(500).json({ msg: "error-message" });
   }
 };
