@@ -7,7 +7,7 @@ const firestoreDB = firebaseAdmin.firestore();
 const campaigns = firestoreDB.collection("campaigns");
 const users = firestoreDB.collection("users");
 
-exports.activeCampaigns = (req, res) => {
+exports.activeCampaigns = async (req, res) => {
   /* What to do here??..
       0. Extract the body.
       1. Fetch all ACTIVE campaigns -- if possible with filter (else, get all and filter).
@@ -18,24 +18,40 @@ exports.activeCampaigns = (req, res) => {
         */
   try {
     // fetch all active campaigns & filter with `req.params.count`.
-    return res.status(200).json(`Sending ${req.params.count} active campaigns`);
+    const snapshot = await campaigns
+      .where("campaignStatus", "==", "ACTIVE") // filtering only active campaigns.
+      .orderBy("createdAt")
+      .limitToLast(parseInt(req.params.count)) // limit to count required by user.
+      .get();
+    // return res.status(200).json(`Sending ${req.params.count} active campaigns`);
+    const activeCampaigns = snapshot.docs.map((doc) => doc.data());
+    console.log(activeCampaigns);
+    return res.status(200).json(activeCampaigns);
   } catch (err) {
     // NOTE: decide status code based on the error..
+    console.log(err);
     return res.status(500).json({ msg: "error-message" });
   }
 };
 
-exports.viewCampaign = (req, res) => {
+exports.viewCampaign = async (req, res) => {
   /* What to do here??..
       0. Get the campaign details based on `req.params.address`.
       ‼ May be, we also need to extract data from blockchain. -- unsure about this -- help-wanted.
   */
-
+  const uniqueId = req.params.address;
   try {
     // fetch all active campaigns & filter with `req.params.count`.
-    return res.status(200).json(`Sending ${req.params.address} campaign`);
+    const campaign = await campaigns.doc("" + uniqueId).get();
+    if (campaign.exists) {
+      return res.status(200).json(campaign.data());
+    } else
+      return res.status(404).json({
+        msg: "No such campaign exists. Please check the URL entered.",
+      });
   } catch (err) {
     // NOTE: decide status code based on the error..
+    console.log(err);
     return res.status(500).json({ msg: "error-message" });
   }
 };
@@ -80,6 +96,7 @@ exports.createCampaign = async (req, res) => {
         category: category,
         ethFunded: 0,
         deadline: deadline,
+        createdAt: uniqueId,
         raisedBy: UID, // should be req.user.UID
         walletAddress: walletAddress,
       });
