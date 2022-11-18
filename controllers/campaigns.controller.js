@@ -7,23 +7,6 @@ const firestoreDB = firebaseAdmin.firestore();
 const campaigns = firestoreDB.collection("campaigns");
 const users = firestoreDB.collection("users");
 
-exports.recentCampaigns = (req, res) => {
-  /* What to do here??..
-      0. Extract the body.
-      1. Fetch all ACTIVE campaigns -- if possible with filter (else, get all and filter).
-      2. based on the result, send appropriate message back as acknowledgement.
-        - if could successfully, get campaigns - return those, else error msg.
-   🌟 : take default value to be 3.
-        */
-  try {
-    // Fetch active campaigns and filter with `req.params.count`.
-    return res.status(200).json(`Sending ${req.params.count} recent campaigns`);
-  } catch (err) {
-    // NOTE: decide status code based on the error..
-    return res.status(500).json({ msg: "error-message" });
-  }
-};
-
 exports.activeCampaigns = (req, res) => {
   /* What to do here??..
       0. Extract the body.

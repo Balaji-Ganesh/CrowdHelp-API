@@ -4,7 +4,6 @@ const campaigns = require("../controllers/campaigns.controller");
 
 module.exports = (app) => {
   // GET routes.. for these no authentications gets done.
-  router.get("/recent-campaigns/:count", campaigns.recentCampaigns); // NOTE; by /:count, can access req.params.count in controller
   router.get("/active-campaigns/:count", campaigns.activeCampaigns); // NOTE; by /:count, can access req.params.count in controller
   router.get("/campaign/:address", campaigns.viewCampaign); // NOTE; by /:count, can access req.params.count in controller
   // router.get("/all-campaigns/:count/:userId", campaigns.allCampaigns); // NOTE; by /:userId, can access req.params.userId in controller

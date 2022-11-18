@@ -14,7 +14,7 @@ const app = express();
 // middlewares.. -- Mind that, all the requests will pass through these.!!
 app.use(bodyParser.json()); // handle JSON data exchanges..
 app.use(cors());
-app.use(middleware.decodeToken); // used for validating the token received from client.
+// app.use(middleware.decodeToken); // used for validating the token received from client.
 
 // Routes..
 // app.use("/auth", authRoutes);
