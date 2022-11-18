@@ -33,6 +33,21 @@ exports.activeCampaigns = (req, res) => {
   }
 };
 
+exports.viewCampaign = (req, res) => {
+  /* What to do here??..
+      0. Get the campaign details based on `req.params.address`.
+      ‼ May be, we also need to extract data from blockchain. -- unsure about this -- help-wanted.
+  */
+
+  try {
+    // fetch all active campaigns & filter with `req.params.count`.
+    return res.status(200).json(`Sending ${req.params.address} campaign`);
+  } catch (err) {
+    // NOTE: decide status code based on the error..
+    return res.status(500).json({ msg: "error-message" });
+  }
+};
+
 exports.createCampaign = (req, res) => {
   /* What to do here??..
       0. Extract the body.
