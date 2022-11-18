@@ -5,7 +5,7 @@ const cors = require("cors");
 const middleware = require("./middlewares");
 
 // load routes..
-const authRoutes = require("./routes/auth");
+// const authRoutes = require("./routes/auth");
 const apiRoutes = require("./routes/app");
 
 // Instantiate..

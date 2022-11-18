@@ -11,6 +11,7 @@ A backend service for the UI-platform
 ```
 
 ## Packages installed
+
 - `npm install firebase-admin` to work with firebase.
 
 ## Routes guide..
@@ -20,15 +21,15 @@ A backend service for the UI-platform
 `https://heroku-deploy/api/<route>`
 where route is..
 
-| METHOD | Route                     | Response | Body | Description                             |
-| ------ | ------------------------- | -------- | ---- | --------------------------------------- |
-| `GET`  | `/`                       | JSON     | -    | Return 4 **recent** active campaigns.   |
-| `GET`  | `/active-campaigns`       | JSON     | -    | Return list of **all** active campaigns |
-| `POST` | `/create-campaign`        | JSON     | JSON |                                         |
-| `GET`  | `/campaign/<HexAddresss>` | JSON     | -    |                                         |
-| `POST` | `/end-campaign`           | JSON     | JSON |                                         |
-
-
+| METHOD | Route                      | Response | Body | Description                                        |
+| ------ | -------------------------- | -------- | ---- | -------------------------------------------------- |
+| `GET`  | `/recent-campaigns/:count` | JSON     | -    | Return `count` **recent** active campaigns.        |
+| `GET`  | `/active-campaigns`        | JSON     | -    | Return list of **all** active campaigns            |
+| `GET`  | `/all-campaigns`           | JSON     | -    | Return list of **all** active & inactive campaigns |
+| `GET`  | `/campaign/<HexAddresss>`  | JSON     | -    |                                                    |
+| `POST` | `/create-campaign`         | JSON     | JSON |                                                    |
+| `POST` | `/fund-campaign`           | JSON     | JSON |                                                    |
+| `POST` | `/end-campaign`            | JSON     | JSON |                                                    |
 
 - [GET ] `/` active_campaigns with limit of 4
 - [GET ] active-campaigns -> Give array of JSON objects.
