@@ -127,10 +127,13 @@ exports.fundCampaign = async (req, res) => {
     0. Extract the body.
     1. Perform transaction in smart contract.
     (after successful transaction)
-    2. Update the amount raised in firestore doc.
+    ---2. Update the amount raised in firestore doc.---
     3. Update the funder profile with the campaign (address) he/she contributed for.
     4. based on the result, send appropriate message.
-  */
+  
+    Is it necessary to update the balance in firestore?
+    Can't it be fetched from blockchain?? so, STEP-2: INVALID
+    */
   // console.log("fund campaign called");
   const uniqueId = req.params.address;
   try {
