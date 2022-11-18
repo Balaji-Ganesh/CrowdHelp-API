@@ -21,6 +21,8 @@ class Middleware {
         });
       } catch (err) {
         console.log("[ERROR] " + err);
+        if (err instanceof TypeError)
+          return response.json({ msg: "Restricted access. Sign-in required." });
         return response.json({ msg: "Internal Error" }).status(500);
       }
     } else return next(); // skip authentication for other [public] routes..

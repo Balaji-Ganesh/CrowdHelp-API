@@ -6,7 +6,7 @@ const middleware = require("./middlewares");
 
 // load routes..
 // const authRoutes = require("./routes/auth");
-const apiRoutes = require("./routes/app");
+// const campaignRoutes = require("./routes/campaigns.routes");
 
 // Instantiate..
 const app = express();
@@ -18,11 +18,22 @@ app.use(middleware.decodeToken); // used for validating the token received from 
 
 // Routes..
 // app.use("/auth", authRoutes);
-app.use("/api", apiRoutes);
+// app.use("/api", campaignRoutes);
+require("./routes/campaigns.routes")(app); // HigherOrderFunction, app object obeys the routes..
 
 app.use("/", (req, res) => {
   // ONLY for testing..
-  res.send("Hello World");
+  // console.log(");
+  res.send(
+    "You queried for '" +
+      req.path +
+      "' with '" +
+      req.method +
+      "' method. \n\
+      I'm 404-Not_Found. \n\
+    You've reached me as used incorrect or undefined route-name or method. \n\
+    Don't panic, just cross-check."
+  );
 });
 
 // listen
