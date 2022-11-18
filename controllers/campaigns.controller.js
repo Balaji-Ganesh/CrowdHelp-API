@@ -138,7 +138,7 @@ exports.createCampaign = async (req, res) => {
   }
 };
 
-exports.fundCampaign = (req, res) => {
+exports.fundCampaign = async (req, res) => {
   /*
     What to do here..?
     0. Extract the body.
@@ -148,17 +148,45 @@ exports.fundCampaign = (req, res) => {
     3. Update the funder profile with the campaign (address) he/she contributed for.
     4. based on the result, send appropriate message.
   */
+  // console.log("fund campaign called");
+  const uniqueId = req.params.address;
   try {
-    // STEP-0:
-
+    // STEP-0: Extract the body
+    const { amount } = req.body;
     // STEP-1:
 
     // STEP-2:
 
     // STEP-3:
+    // Get the campaign to which funding happening..
+    const campaign = await campaigns.doc("" + uniqueId).get();
+    const UID = "Y8YQZY3GhRahhqT7uJ0bP01sfnJ2";
+    if (campaign.exists) {
+      const user = users.doc("" + UID); // get the UID, to whom to be appended.
+      // if funding for the first time..
+      if ((await user.get()).exists) {
+        await user.update({
+          campaignsBacked: firebaseAdmin.firestore.FieldValue.arrayUnion({
+            campaignId: uniqueId,
+            amount: amount,
+          }),
+        });
+      }
+      // if already funded, append this new campaignId.
+      else {
+        user.set({
+          campaignsBacked: [{ campaignId: uniqueId, amount: amount }],
+        });
+      }
+    } else
+      return res.status(404).json({
+        msg: "No such campaign exists. Please check the URL entered.",
+      });
+    // STEP-4:
     return res.status(200).json("fund campaign route");
   } catch (err) {
     // NOTE: decide status code based on the error..
+    console.log(err);
     return res.status(500).json({ msg: "error-message" });
   }
 };
