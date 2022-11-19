@@ -75,7 +75,6 @@ exports.createCampaign = async (req, res) => {
       title,
       description,
       ethRaised,
-      category,
       deadline,
       walletAddress,
       minContribAmount,
@@ -131,7 +130,8 @@ exports.createCampaign = async (req, res) => {
         campaignId: campaign.id,
       });
     // based on this id, user-vew will navigate to the campaign page.
-    else return res.status(200).json({ msg: "No such campaign" });
+    else
+      return res.status(404).json({ msg: "No such campaign created/exists." });
   } catch (err) {
     // NOTE: decide status code based on the error..
     console.error(err);
